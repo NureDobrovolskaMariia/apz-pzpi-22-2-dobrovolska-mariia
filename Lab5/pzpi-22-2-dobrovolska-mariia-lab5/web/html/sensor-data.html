@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дані сенсорів - Система управління інкубатором</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+</head>
+<body>
+<nav class="navbar">
+        <div class="navbar-brand">
+            <span class="logo">🐣</span> Chicken Incubator
+        </div>
+        <ul class="navbar-nav">
+            <li><a href="/html/dashboard.html" class="nav-link active">Головна</a></li>
+            <li><a href="/html/devices.html" class="nav-link">Пристрої</a></li>
+            <li><a href="/html/alerts.html" class="nav-link">Сповіщення</a></li>
+            <li><a href="/html/sensor-data.html" class="nav-link">Дані сенсорів</a></li>
+            <li id="adminPanelLink" style="display: none;"><a href="/html/admin.html" class="nav-link">Панель адміністратора</a></li>
+        </ul>
+        <div class="navbar-user">
+            <div class="dropdown">
+                <span id="userDropdownTrigger" class="dropdown-trigger">
+                    <span id="userNameNav"></span> (<span id="userRoleNav"></span>)
+                </span>
+                <div class="dropdown-content" id="userDropdown">
+                    <a href="/html/profile.html">Профіль</a>
+                    <a href="#" id="logoutBtnDropdown">Вихід</a>
+                </div>
+            </div>
+            <button id="logoutBtn" class="btn btn-sm secondary-btn hide-on-mobile" style="display: none;">Вихід</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content-header">
+            <h1>Дані сенсорів</h1>
+        </div>
+
+        <div class="tab-navigation">
+            <button class="tab-link active" data-tab="latest-data">Останні дані</button>
+            <button class="tab-link" data-tab="device-data">Дані пристрою</button>
+            <button class="tab-link" data-tab="aggregated-data">Агреговані дані</button>
+            <button class="tab-link" data-tab="data-statistics">Статистика даних</button>
+        </div>
+
+        <div id="latest-dataTab" class="tab-content active">
+            <div class="card">
+                <h2>Останні дані з усіх пристроїв</h2>
+                <div id="latestDataDisplay" class="sensor-data-grid">
+                    <p>Завантаження останніх даних...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="device-dataTab" class="tab-content">
+            <div class="card">
+                <h2>Детальні дані по пристрою</h2>
+                <div class="table-filters">
+                    <label for="deviceDataSelect">Пристрій:</label>
+                    <select id="deviceDataSelect">
+                        <option value="">-- Виберіть пристрій --</option>
+                    </select>
+                    <label for="deviceDataPeriodFilter">Період:</label>
+                    <select id="deviceDataPeriodFilter">
+                        <option value="hourly">Остання доба (погодинно)</option>
+                        <option value="daily">Останні 7 днів (щоденно)</option>
+                        <option value="monthly">Останні 30 днів (щоденно)</option>
+                    </select>
+                    <label for="deviceDataTypeFilter">Тип даних:</label>
+                    <select id="deviceDataTypeFilter">
+                        <option value="all">Всі</option>
+                        <option value="temperature">Температура</option>
+                        <option value="humidity">Вологість</option>
+                        <option value="lightLevel">Освітлення</option>
+                    </select>
+                </div>
+                <div class="chart-canvas-wrapper">
+                    <canvas id="deviceSpecificChart"></canvas>
+                </div>
+                <h3 class="mt-20">Таблиця даних</h3>
+                <div class="table-responsive">
+                    <table class="device-table">
+                        <thead>
+                            <tr id="deviceSpecificDataTableHeader">
+                                </tr>
+                        </thead>
+                        <tbody id="deviceSpecificDataTableBody">
+                            <tr><td colspan="4">Виберіть пристрій та період для відображення даних.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                 <div class="pagination-controls mt-10">
+                    <button id="prevDeviceDataPage" class="btn btn-sm secondary-btn">Попередня</button>
+                    <span id="currentDeviceDataPage">Сторінка 1</span>
+                    <button id="nextDeviceDataPage" class="btn btn-sm secondary-btn">Наступна</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="aggregated-dataTab" class="tab-content">
+            <div class="card">
+                <h2>Агреговані дані</h2>
+                <div class="table-filters">
+                    <label for="aggregatedDeviceSelect">Пристрій:</label>
+                    <select id="aggregatedDeviceSelect">
+                        <option value="">-- Виберіть пристрій --</option>
+                    </select>
+                    <label for="aggregatedPeriodSelect">Період агрегації:</label>
+                    <select id="aggregatedPeriodSelect">
+                        <option value="hourly">Погодинно (остання доба)</option>
+                        <option value="daily">Щоденно (останні 7 днів)</option>
+                        <option value="weekly">Щотижнево (останні 30 днів)</option>
+                    </select>
+                </div>
+                <div id="aggregatedDataDisplay" class="mt-20">
+                    <p>Виберіть пристрій та період для відображення агрегованих даних.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="data-statisticsTab" class="tab-content">
+            <div class="card">
+                <h2>Статистика даних по пристрою</h2>
+                 <div class="table-filters">
+                    <label for="statsDeviceSelect">Пристрій:</label>
+                    <select id="statsDeviceSelect">
+                        <option value="">-- Виберіть пристрій --</option>
+                    </select>
+                    <label for="statsPeriodSelect">Період (днів):</label>
+                    <select id="statsPeriodSelect">
+                        <option value="1">1 день</option>
+                        <option value="7" selected>7 днів</option>
+                        <option value="30">30 днів</option>
+                    </select>
+                </div>
+                <div id="dataStatisticsDisplay" class="summary-grid mt-20">
+                    <p>Виберіть пристрій та період для відображення статистики.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/sensor-data.js"></script>
+</body>
+</html>

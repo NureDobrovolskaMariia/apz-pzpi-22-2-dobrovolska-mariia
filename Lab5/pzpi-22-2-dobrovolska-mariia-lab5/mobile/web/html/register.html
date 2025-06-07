@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вхід - Система управління інкубатором</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Регистрация</h2>
+            <form id="registerForm">
+                <div class="input-group">
+                    <label for="registerName">Ім'я</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="input-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="input-group">
+                    <label for="registerPassword">Пароль</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirmPassword">Підтвердження паролю</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                <button type="submit" class="btn primary-btn">Реєстрація</button>
+            </form>
+            <p class="mt-20">Вже є аккаунт? <a href="/html/login.html">Війти</a></p>
+            <div id="message" class="message-area"></div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+</body>
+</html>

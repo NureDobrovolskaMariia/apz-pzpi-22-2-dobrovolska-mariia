@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить пристрій - Система управления инкубатором</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+ <nav class="navbar">
+        <div class="navbar-brand">
+            <span class="logo">🐣</span> Chicken Incubator
+        </div>
+        <ul class="navbar-nav">
+            <li><a href="/html/dashboard.html" class="nav-link active">Головна</a></li>
+            <li><a href="/html/devices.html" class="nav-link">Пристрої</a></li>
+            <li><a href="/html/alerts.html" class="nav-link">Сповіщення</a></li>
+            <li><a href="/html/sensor-data.html" class="nav-link">Дані сенсорів</a></li>
+            <li id="adminPanelLink" style="display: none;"><a href="/html/admin.html" class="nav-link">Панель адміністратора</a></li>
+        </ul>
+        <div class="navbar-user">
+            <div class="dropdown">
+                <span id="userDropdownTrigger" class="dropdown-trigger">
+                    <span id="userNameNav"></span> (<span id="userRoleNav"></span>)
+                </span>
+                <div class="dropdown-content" id="userDropdown">
+                    <a href="/html/profile.html">Профіль</a>
+                    <a href="#" id="logoutBtnDropdown">Вихід</a>
+                </div>
+            </div>
+            <button id="logoutBtn" class="btn btn-sm secondary-btn hide-on-mobile" style="display: none;">Вихід</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content-header">
+            <h1>Додати новий пристрій</h1>
+        </div>
+
+        <div class="card">
+            <form id="addDeviceForm">
+                <div class="input-group">
+                    <label for="deviceName">Назва пристрою</label>
+                    <input type="text" id="deviceName" required>
+                </div>
+                 <div class="input-group">
+                    <label for="deviceLocation">Локация</label>
+                    <input type="text" id="deviceLocation" value="Farm">
+                </div>
+                <div class="input-group">
+                    <label for="deviceType">Тип пристрою</label>
+                    <select id="deviceType" required>
+                        <option value="chicken_incubator">Chicken Incubator</option>
+                        </select>
+                </div>
+                 <div class="input-group">
+                    <label for="generatedDeviceId">ID пристрою (генерируется)</label>
+                    <input type="text" id="generatedDeviceId" readonly>
+                    <button type="button" class="btn secondary-btn btn-sm mt-5" id="generateIdBtn">Сгенерувати ID</button>
+                </div>
+                <button type="submit" class="btn primary-btn">Зареєструвати пристрій</button>
+            </form>
+            <div id="addDeviceMessage" class="message-area mt-10"></div>
+            <p class="mt-20"><a href="/html/devices.html">← Назад к списку пристроїв</a></p>
+        </div>
+    </div>
+
+    <script src="/js/devices.js"></script> </body>
+</html>
