@@ -1,1 +1,383 @@
+Міністерство освіти і науки України 
+Харківський національний університет радіоелектроніки
 
+
+Кафедра програмної інженерії
+
+
+Звіт
+З лабораторної роботи №2
+
+З дисципліни «Архітектура програмного забезпечення» 
+на тему: «РОЗРОБКА СЕРВЕРНОЇ ЧАСТИНИ СИСТЕМИ »
+
+
+
+Виконала:
+ст. гр. ПЗПІ-22-2						Добровольська М. А.
+
+
+
+
+Перевірив:
+ст. викладач каф. ПІ						Сокорчук І. П.
+
+
+
+
+
+
+
+
+
+
+
+
+Харків 2025 
+1	ІСТОРІЯ ЗМІН
+
+
+№	Дата	      Версія звіту	Опис	змін	та виправлень
+1	17.05.2025	0.1	          Створено	розділ «Завдання»
+2	18.05.2025	0.1	          Створено	розділ «Опис	виконаної роботи»
+3	19.05.2025	0.1	          Наповнено	додатки А та Б
+4	19.05.2025	0.1	          Підбито	висновки роботи
+5	19.05.2025	0.1	          Заповнено додаток В з програмним кодом
+
+
+
+
+2	ЗАВДАННЯ
+
+Метою даного лабораторного заняття є втілення функцій бізнес логіки та функцій адміністрування системи.
+
+
+3	ОПИС ВИКОНАНОЇ РОБОТИ
+
+У процесі розробки було підготовлено відеозвіт, посилання на який наведено у додатку А.
+У межах виконання проєкту було створено програмну систему, яка забезпечує зручний та ефективний контроль процесу інкубації яєць. Основний акцент зроблено на можливості підключення інкубаційних пристроїв, постійного моніторингу основних показників (температури, вологості та рівня освітленості), надання користувачу інформативної аналітики.
+Крім основного функціоналу моніторингу, у систему інтегровано модуль оповіщення, що забезпечує оперативне інформування користувача про критичні зміни параметрів, наприклад, перегрів або надто низький рівень вологості. Це дозволяє швидко вжити заходів — відкоригувати параметри або перевірити стан пристрою.
+Також реалізовано адміністративну панель, яка надає можливість управління обліковими записами користувачів (підвисити статус, або видалити), а також передбачене автоматичне резервне копіювання бази даних Mongo, у якій зберігаються всі дані про інкубаційні цикли та події. Це сприяє захисту інформації та забезпеченню стабільної роботи системи.
+Передбачено кілька рівнів доступу: адміністратор має повний контроль над системою, у тому числі зміну параметрів, перегляд всіх користувачів; доступ до моніторингу та перегляду аналітики.
+
+
+ВИСНОВКИ
+
+У результаті реалізації проєкту вдалося створити ключові компоненти програмного забезпечення для автоматизованого контролю інкубаційних процесів, з використанням математичних методів аналізу даних. Окрему увагу приділено системі сповіщень, яка забезпечує інформування про нестандартні ситуації у режимі реального часу, та реалізації адміністративного інтерфейсу з керуванням доступом користувачів до системи.
+
+ 
+ДОДАТОК А
+Відеозапис
+
+Відеозапис	презентації	результатів	лабораторної	роботи:
+https://youtu.be/h7QL7Hc4wwM
+
+
+
+Хронологічний опис відеозапису: 
+
+00:30 - Authentication
+02:03 - Device Management
+05:06 - Sensor Data
+05:57 - Alert Management
+08:06 - Admin Only
+09:03 - Health & Inf 
+ДОДАТОК Б
+Графічні матеріали
+
+ 
+Рисунок Б.1 – UML Діаграма прецедентів
+
+
+ 
+
+Рисунок Б.2 – ER діаграма бази даних 
+ 
+Рисунок Б.3 – Діаграма структури бази да 
+ 
+ 
+
+Рисунок Б.4 – Діаграма діяльності для підключення ТЗ
+ 
+
+ 
+
+Рисунок Б.5– Діаграма діяльності для статистики девайсу 
+
+ДОДАТОК В
+
+Програмний код
+
+
+В.1 Математична обробка даних. Код файлу з розрахунком статистики по диним девайсу та створення звіту.
+
+1	// Get data statistics
+2	const getDataStatistics = catchAsync(async (req, res, next) => {
+3	const { deviceId } = req.params;
+4	const { days = 7 } = req.query;
+
+5	// Verify device ownership
+6	const device = await Device.findOne({
+7	deviceId,
+8	userId: req.user.id,
+9	isActive: true
+10	});
+
+11	if (!device) {
+12	return next(new AppError('Device not found', 404));
+13	}
+
+14	const startDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+
+15	const stats = await SensorData.aggregate([
+16	{
+17	$match: {
+18	deviceId,
+19	timestamp: { $gte: startDate }
+20	}
+21	},
+22	{
+23	$group: {
+24	_id: null,
+25	totalDataPoints: { $sum: 1 },
+26	avgTemperature: { $avg: '$temperature' },
+27	avgHumidity: { $avg: '$humidity' },
+28	avgLightLevel: { $avg: '$lightLevel' },
+29	minTemperature: { $min: '$temperature' },
+30	maxTemperature: { $max: '$temperature' },
+31	minHumidity: { $min: '$humidity' },
+32	maxHumidity: { $max: '$humidity' },
+33	minLightLevel: { $min: '$lightLevel' },
+34	maxLightLevel: { $max: '$lightLevel' },
+35	firstReading: { $min: '$timestamp' },
+36	lastReading: { $max: '$timestamp' }
+37	}
+38	}
+39	]);
+
+40	// Calculate temperature and humidity variance
+41	const variance = await SensorData.aggregate([
+42	{
+43	$match: {
+44	deviceId,
+45	timestamp: { $gte: startDate }
+46	}
+47	},
+48	{
+49	$group: {
+50	_id: null,
+51	tempVariance: { $stdDevPop: '$temperature' },
+52	humidityVariance: { $stdDevPop: '$humidity' }
+53	}
+54	}
+55	]);
+
+56	const result = stats[0] || {};
+57	if (variance[0]) {
+58	result.temperatureStdDev = variance[0].tempVariance;
+59	result.humidityStdDev = variance[0].humidityVariance;
+60	}
+
+61	res.status(200).json({
+62	status: 'success',
+63	period: `${days} days`,
+64	data: {
+65	statistics: result
+66	}
+67	});
+68	});
+
+69	// Export data (CSV format)
+70	const exportData = catchAsync(async (req, res, next) => {
+71	const { deviceId } = req.params;
+72	const { startDate, endDate, format = 'json' } = req.query;
+
+73	// Verify device ownership
+74	const device = await Device.findOne({
+75	deviceId,
+76	userId: req.user.id,
+77	isActive: true
+78	});
+
+79	if (!device) {
+80	return next(new AppError('Device not found', 404));
+81	}
+
+82	// Build query
+83	const query = { deviceId };
+84	if (startDate || endDate) {
+85	query.timestamp = {};
+86	if (startDate) query.timestamp.$gte = new Date(startDate);
+87	if (endDate) query.timestamp.$lte = new Date(endDate);
+88	}
+
+89	// Limit export to prevent large downloads
+90	const data = await SensorData.find(query)
+91	.sort({ timestamp: -1 })
+92	.limit(10000) // Limit to 10k records
+93	.select('temperature humidity lightLevel timestamp -_id');
+
+94	if (format === 'csv') {
+95	// Convert to CSV
+96	const csvHeader = 'timestamp,temperature,humidity,lightLevel\n';
+97	const csvData = data.map(row => 
+98	`${row.timestamp.toISOString()},${row.temperature},${row.humidity},${row.lightLevel}`
+99	).join('\n');
+
+100	res.setHeader('Content-Type', 'text/csv');
+101	res.setHeader('Content-Disposition', `attachment; filename="${deviceId}-data.csv"`);
+102	res.send(csvHeader + csvData);
+103	} else {
+104	// Return JSON
+105	res.status(200).json({
+106	status: 'success',
+107	deviceId,
+108	exportedAt: new Date().toISOString(),
+109	results: data.length,
+110	data: {
+111	sensorData: data
+112	}
+113	});
+114	}
+115	});
+
+
+
+В.2 Математична обробка даних. Код файлу з розрахунком статистики по усім девайсам.
+
+1	// Get device statistics
+2	const getDeviceStats = catchAsync(async (req, res, next) => {
+3	const { deviceId } = req.params;
+
+4	const device = await Device.findOne({
+5	deviceId,
+6	userId: req.user.id,
+7	isActive: true
+8	});
+
+9	if (!device) {
+10	return next(new AppError('Device not found', 404));
+11	}
+
+12	const now = new Date();
+13	const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+14	const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+15	// Get uptime percentage (last 24 hours)
+16	const totalMinutes = 24 * 60;
+17	const dataPoints = await SensorData.countDocuments({
+18	deviceId,
+19	timestamp: { $gte: oneDayAgo }
+20	});
+21	const expectedDataPoints = totalMinutes / 0.5; // Data every 30 seconds
+22	const uptimePercentage = Math.min(100, (dataPoints / expectedDataPoints) * 100);
+
+23	// Get average conditions (last 24 hours)
+24	const avgConditions = await SensorData.aggregate([
+25	{
+26	$match: {
+27	deviceId,
+28	timestamp: { $gte: oneDayAgo }
+29	}
+30	},
+31	{
+32	$group: {
+33	_id: null,
+34	avgTemperature: { $avg: '$temperature' },
+35	avgHumidity: { $avg: '$humidity' },
+36	avgLightLevel: { $avg: '$lightLevel' },
+37	minTemperature: { $min: '$temperature' },
+38	maxTemperature: { $max: '$temperature' },
+39	minHumidity: { $min: '$humidity' },
+40	maxHumidity: { $max: '$humidity' }
+41	}
+42	}
+43	]);
+
+44	// Get alerts count (last week)
+45	const alertsCount = await Alert.countDocuments({
+46	deviceId,
+47	createdAt: { $gte: oneWeekAgo }
+48	});
+
+49	// Get unresolved alerts
+50	const unresolvedAlerts = await Alert.countDocuments({
+51	deviceId,
+52	isResolved: false
+53	});
+
+54	res.status(200).json({
+55	status: 'success',
+56	data: {
+57	deviceId,
+58	uptimePercentage: Math.round(uptimePercentage * 100) / 100,
+59	averageConditions: avgConditions[0] || null,
+60	alertsLastWeek: alertsCount,
+61	unresolvedAlerts,
+62	deviceAge: Math.floor((now - device.createdAt) / (1000 * 60 * 60 * 24)), // days
+63	lastSeen: device.lastSeen
+64	}
+65	});
+66	});
+
+67	// Quick device actions
+68	const quickActions = catchAsync(async (req, res, next) => {
+69	const { action } = req.body;
+70	const { deviceId } = req.params;
+
+71	const device = await Device.findOne({
+72	deviceId,
+73	userId: req.user.id,
+74	isActive: true
+75	});
+
+76	if (!device) {
+77	return next(new AppError('Device not found', 404));
+78	}
+
+79	let command = {};
+
+80	switch (action) {
+81	case 'turn_eggs':
+82	command = { turn_eggs: true };
+83	break;
+84	case 'enable_auto':
+85	command = { auto_mode: true };
+86	break;
+87	case 'disable_auto':
+88	command = { auto_mode: false };
+89	break;
+90	case 'emergency_stop':
+91	command = { 
+92	auto_mode: false, 
+93	heater: false, 
+94	humidifier: false 
+95	};
+96	break;
+97	default:
+98	return next(new AppError('Invalid action', 400));
+99	}
+
+100	try {
+101	mqttService.sendCommand(req.user.id, deviceId, command);
+
+102	res.status(200).json({
+103	status: 'success',
+104	message: `Action '${action}' executed successfully`,
+105	data: { action, command }
+106	});
+107	} catch (error) {
+108	return next(new AppError('Failed to execute action', 500));
+109	}
+110	});
+
+111	module.exports = {
+112	getUserDevices,
+113	getDevice,
+114	registerDevice,
+115	updateDevice,
+116	deleteDevice,
+117	sendCommand,
+118	getDeviceStats,
+119	quickActions
+120	};
