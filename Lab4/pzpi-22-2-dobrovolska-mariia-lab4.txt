@@ -1,1 +1,361 @@
+Міністерство освіти і науки України Харківський національний університет радіоелектроніки
+
+Кафедра програмної інженерії
+
+Звіт
+З лабораторної роботи №4
+
+З дисципліни «Архітектура програмного забезпечення»
+на тему: «РОЗРОБКА МОБІЛЬНОГО КЛІЄНТА СИСТЕМИ»
+
+
+Виконавець:
+ст. гр. ПЗПІ-22-7							Добровольська М.А.
+
+Перевірив:
+ст. викладач каф. ПІ						Сокорчук І. П.
+
+
+
+
+
+
+
+
+
+
+
+Харків 2025
+ 
+1	ІСТОРІЯ ЗМІН
+
+
+№	Дата	      Версія звіту	Опис	змін	та виправлень
+1	27.05.2025	0.1	          Створено структуру звіту. Визначено завдання	на лабораторну роботу
+2	29.05.2025	0.1	          Описано хід роботи, додаток А, додаток Б, додаток В. Сформульовано висновок роботи
+
+
+2	ЗАВДАННЯ
+
+Метою даного лабораторного заняття є розробка мобільної / mobile частини програмної системи.
+
+3	ОПИС ВИКОНАНОЇ РОБОТИ
+
+
+До виконаної роботи було створено відеозвіт, посилання на який наведено у додатку А.
+У рамках виконання завдання було розроблено клієнтську частину мобільного додатку для платформи Android з використанням мови програмування Kotlin, що забезпечує інтерактивний та функціональний інтерфейс для системи автоматизації інкубації птахів. Розробку розпочато з ініціалізації проєкту в Android Studio, у ході якої було налаштовано структуру застосунку, підключено Retrofit2 для взаємодії з REST API, використано ViewModel з LiveData/StateFlow для реактивного оновлення інтерфейсу та забезпечено зберігання сесій авторизації через SharedPreferences.
+Було створено ключові екрани, зокрема:
+-	екран авторизації та реєстрації користувачів;
+-	головний екран з переліком пристроїв інкубації (інкубаторів);
+-	екран перегляду детальної інформації про окремий пристрій;
+-	сторінка тривог (сповіщень) із фільтрацією за типами (критичні / усі);
+-	сторінка зі статистикою сповіщень (всі, нерозв’язані, за типом);
+-	екран профілю користувача з інформацією про акаунт, пристрої, налаштування алертів;
+-	окрема сторінка редагування температурних і вологісних порогів для оповіщення.
+Під час розробки особливу увагу було приділено інтуїтивності інтерфейсу, збереженню структурованості даних та забезпеченню двомовної підтримки (українська/англійська). Інтерфейс побудовано із використанням Material Design з адаптивною версткою та дотриманням єдиного стилю, спільного з веб-інтерфейсом системи. Для списків даних використано RecyclerView з ефективною перерисовкою через DiffUtil, а взаємодія з API реалізована через окремий шар репозиторіїв, що забезпечує ізоляцію логіки.
+У рамках бізнес-логіки мобільного застосунку реалізовано:
+-	завантаження й відображення даних пристроїв, їх статусу та останнього з'єднання;
+-	отримання та фільтрація сповіщень за категоріями;
+-	перегляд аналітики: кількість усіх, останніх та нерозв’язаних сповіщень;
+-	редагування користувацьких налаштувань температури та вологості;
+-	завантаження інформації про акаунт та дату реєстрації;
+-	підтримка авторизації з обробкою токена JWT.
+У результаті було створено повнофункціональний мобільний клієнт, що інтегрується з бекенд-системою інкубації, забезпечуючи повноцінну взаємодію користувача з його пристроями. Створений застосунок відповідає вимогам до системи Chicken Incubator Management System та готовий до подальшого розширення, зокрема впровадження real-time моніторингу на базі WebSocket або MQTT.
+Деякий код застосунку наведено у додатку Б.
+
+Прийняті інженерні рішення для мобільного застосунку
+Під час розробки мобільного застосунку для системи автоматизації інкубації яєць було прийнято низку ключових технічних та архітектурних рішень, що забезпечили надійність, масштабованість та зручність використання IoT-платформи для користувачів різного рівня.
+
+1.	Технологічний стек та мова програмування
+Kotlin як основна мова розробки:
+Застосунок розроблено мовою Kotlin, що забезпечує сучасний синтаксис, скорочує boilerplate-код та дозволяє зосередитися на бізнес-логіці. Kotlin повністю сумісна з Android SDK і рекомендована Google як мова для створення Android-додатків.
+Material Design 3:
+У застосунку використано дизайн-систему Material Design 3 з акцентом на простоту, адаптивність до розмірів екранів, підтримку світлої/темної теми та стилістичну єдність із веб-версією платформи.
+
+2.	Архітектурні патерни та структура UI
+MVVM (Model-View-ViewModel):
+Для забезпечення розділення логіки UI та бізнес-логіки використано патерн MVVM з ViewModel, LiveData/StateFlow та репозиторіями, що дозволяє зручно масштабувати застосунок та підтримувати його у майбутньому.
+Фрагментна структура UI:
+Інтерфейс застосунку реалізовано на основі фрагментів, що дозволяє. Ізольовано працювати над окремими функціональними блоками. Керувати навігацією через Activities та Fragments. Зручно реалізувати підтримку навігації між екранами:
+-	LoginActivity / RegisterActivity — автентифікація;
+-	ResultsActivity — головна панель з пристроями;
+-	DeviceDetailsActivity — перегляд конкретного інкубатора;
+-	AlertsActivity та CriticalAlertsActivity — перегляд сповіщень;
+-	AlertStatsActivity — статистика сповіщень;
+-	ProfileActivity / SettingsActivity — профіль та налаштування.
+
+3. Мережева взаємодія та API інтеграція
+Retrofit + OkHttp:
+Використано Retrofit для побудови HTTP-запитів з автоматичним парсингом JSON-відповідей та OkHttp інтерсептором для додавання JWT токену в кожен запит.
+API інтерфейси:
+-	AuthAPI — логін, реєстрація, профіль користувача;
+-	DeviceAPI — отримання списку інкубаторів, додавання/редагування;
+-	AlertAPI — перегляд усіх/критичних сповіщень;
+-	StatsAPI — отримання статистичних даних користувача.
+
+4. Багатошарова архітектура
+Шар даних (data)
+-	API інтерфейси з Retrofit
+-	Data-класи: ProfileResponse, UserDevice, Alert, StatsResponse тощо
+-	Репозиторії: ApiRepository, що інкапсулює всі запити
+-	Мережева логіка — окремо виділена RetrofitInstance.kt
+Шар UI (ui)
+-	Екрани побудовано як окремі Activities для спрощення навігації
+-	Списки реалізовано через RecyclerView + ListAdapter
+-	Динамічна побудова інтерфейсу з ViewBinding
+Шар логіки (viewmodel)
+-	DeviceViewModel, AuthViewModel, AlertsViewModel — основна бізнес-логіка з LiveData або StateFlow
+-	Розділення запитів, обробки помилок, збереження стану інтерфейсу
+
+5. Безпека, авторизація та сесії
+JWT-токени:
+Під час автентифікації використовується JWT-токен, що зберігається у SharedPreferences. При кожному мережевому запиті він автоматично додається у заголовки запиту через інтерсептор OkHttp.
+Ролі користувачів:
+Застосунок підтримує розмежування доступу для користувачів з різними правами (наприклад, звичайний користувач, адміністратор).
+
+6. UX
+Адаптивність:
+Усі компоненти інтерфейсу масштабуються для різних розмірів екранів. Пріоритет надано легкості у використанні та логічній структурі подачі інформації.
+
+7. Масштабованість і розширення
+Модульність:
+Завдяки чіткій структурі проєкт легко розширювати — можна додавати:
+-	нові типи сповіщень;
+-	інші IoT-пристрої (наприклад, датчики СО2, освітлення тощо);
+-	аналітику з графіками;
+-	MQTT/WebSocket для real-time режиму.
+Інтеграція:
+Клієнтський застосунок може бути повністю синхронізований із бекендом, розгорнутим на Node.js з Express.
+
+Опис взаємодії компонентів мобільного застосунку
+Мобільний застосунок системи автоматизації інкубації яєць побудований на сучасній архітектурі, орієнтованій на модульність, масштабованість і зручність підтримки. Основу взаємодії складають чітко структуровані компоненти: Activities, ViewModels, Repositories, API інтерфейси, Models, а також адаптивні UI компоненти.
+
+1. Архітектурна структура та навігація
+MainActivity.kt виступає центральним навігаційним вузлом застосунку, що ініціалізує початкові екрани й обробляє переходи між ними. Структура побудована з використанням Intent-навігації:
+val intent = Intent(this, DeviceDetailsActivity::class.java)
+intent.putExtra("deviceId", device._id)
+startActivity(intent)
+
+Після авторизації користувача автоматично перекидає до ResultsActivity, де відображаються всі підключені пристрої:
+val intent = Intent(this@LoginActivity, ResultsActivity::class.java)
+startActivity(intent)
+finish()
+
+2. Структура екранних компонентів
+Кожен логічний екран винесено в окрему Activity, відповідальну за окремий функціонал:
+-	LoginActivity / RegisterActivity – автентифікація.
+-	ResultsActivity – головний екран з пристроями.
+-	DeviceDetailsActivity – перегляд характеристик пристрою.
+-	AlertActivity – список сповіщень.
+-	AlertStatsActivity – статистика тривог.
+-	ProfileActivity – профіль користувача.
+-	SettingsActivity – налаштування температури та вологості.
+
+3. ViewModel-шар та управління станом
+ViewModel-класи відповідають за асинхронну обробку запитів і керування станом екранів:
+class DevicesViewModel : ViewModel() {
+    private val repository = ApiRepository()
+    val devices = MutableLiveData<List<Device>>()
+
+    fun fetchDevices() {
+        viewModelScope.launch {
+            val response = repository.getDevices()
+            if (response.isSuccessful) {
+                devices.value = response.body()?.data ?: emptyList()
+            }
+        }
+    }
+}
+
+4. Репозиторії та інтеграція з API
+Репозиторії, такі як ApiRepository.kt, забезпечують взаємодію з API через Retrofit:
+suspend fun getDevices(): Response<DevicesResponse> {
+    return RetrofitInstance.api.getAllDevices()
+}
+
+suspend fun getAlertStats(): Response<AlertStatsResponse> {
+    return RetrofitInstance.api.getAlertStats()
+}
+
+Інтерфейс ApiService.kt визначає всі REST-ендпоїнти:
+@GET("/api/devices")
+suspend fun getAllDevices(): Response<DevicesResponse>
+
+@GET("/alerts/statistics")
+suspend fun getAlertStats(): Response<AlertStatsResponse>
+
+@GET("/auth/profile")
+suspend fun getProfile(): Response<ProfileResponse>
+
+
+5. Моделі даних і мапінг JSON
+Дані, що приходять з бекенду, мапляться у data-класи. Наприклад, модель профілю користувача:
+data class ProfileResponse(
+    val status: String,
+    val data: ProfileData
+)
+
+data class ProfileData(
+    val user: User
+)
+
+Статистика з /auth/stats:
+data class UserStatsResponse(
+    val status: String,
+    val data: UserStatsData
+)
+
+data class UserStatsData(
+    val deviceCount: Int,
+    val recentAlertsCount: Int,
+    val unresolvedAlertsCount: Int,
+    val memberSince: String
+)
+
+6. Відображення даних у UI
+Для побудови UI використано RecyclerView з кастомними адаптерами:
+class DeviceAdapter(...) : RecyclerView.Adapter<DeviceAdapter.DeviceViewHolder>() {
+    override fun onBindViewHolder(holder: DeviceViewHolder, position: Int) {
+        val device = devices[position]
+        holder.deviceName.text = device.name
+        holder.status.text = device.status
+    }
+}
+Кожна сторінка має індивідуальну розмітку: наприклад, activity_profile.xml:
+<TextView
+    android:id="@+id/textViewName"
+    android:text="Ім’я користувача"
+    android:textStyle="bold"
+    android:layout_marginTop="16dp"
+    ... />
+
+7. Передача даних між екранами
+Використано Intent.putExtra() для передачі deviceId між активностями:
+val intent = Intent(context, DeviceDetailsActivity::class.java)
+intent.putExtra("deviceId", device._id)
+startActivity(intent)
+
+8. Валідація, безпека та авторизація
+JWT-токен зберігається в SharedPreferences для авторизованого доступу:
+val token = sharedPreferences.getString("jwt_token", "")
+val header = "Bearer $token"
+Кожен запит Retrofit підписується токеном:
+val client = OkHttpClient.Builder()
+    .addInterceptor { chain ->
+        val request = chain.request().newBuilder()
+            .addHeader("Authorization", header)
+            .build()
+        chain.proceed(request)
+    }.build()
+
+9. Налаштування температури/вологості
+На екрані SettingsActivity користувач може змінити діапазон температури і вологості. Приклад обробника:
+buttonSave.setOnClickListener {
+    val minTemp = temperatureMinInput.text.toString().toIntOrNull()
+    val maxTemp = temperatureMaxInput.text.toString().toIntOrNull()
+    val newSettings = AlertSettings(Range(minTemp!!, maxTemp!!), ...)
+    repository.updateProfileSettings(newSettings)
+}
+
+10. Взаємодія з IoT через бекенд
+Хоча прямого з’єднання з IoT-пристроями немає, мобільний застосунок через API керує:
+-	списком пристроїв (GET /api/devices)
+-	сповіщеннями (GET /alerts, GET /alerts/critical)
+-	налаштуваннями користувача (POST /auth/profile)
+-	аналітикою (GET /alerts/statistics, GET /auth/stats)
+ 
+ВИСНОВКИ
+
+У ході виконання лабораторної роботи було реалізовано повноцінну клієнтську частину мобільного застосунку для Android, розроблену мовою Kotlin, яка забезпечує інтуїтивно зрозумілий доступ до функцій моніторингу та керування системою автоматизованої інкубації яєць. Застосунок включає набір основних екранів, таких як реєстрація, вхід, головна панель з переліком підключених пристроїв, розділ сповіщень, сторінки профілю користувача, налаштування параметрів сповіщень, а також візуалізацію статистичних даних.
+Було реалізовано двосторонню взаємодію з серверною частиною через RESTful API, що дозволяє отримувати поточну інформацію про стан пристроїв, зчитувати критичні алерти, зберігати налаштування діапазонів температури та вологості, а також оновлювати профіль користувача. Всі запити захищено за допомогою JWT-автентифікації, що забезпечує безпечну передачу даних.
+Проєкт побудовано за архітектурною моделлю MVVM, що забезпечило чітке розділення логіки, UI та управління станом за допомогою ViewModel та StateFlow. Для мережевої взаємодії було застосовано Retrofit у зв’язці з OkHttp, що дозволило ефективно обробляти запити та відповіді серверу. Дизайн додатку базується на Material Design 3, із підтримкою темної теми, адаптивної верстки та локалізації двома мовами (українською та англійською), що значно покращує досвід користувача.
+Розроблений застосунок не лише забезпечує контроль інкубаційного процесу, а й надає користувачеві зручні засоби для перегляду історичних сповіщень, статистики, швидкого доступу до своїх пристроїв та гнучкого налаштування критичних порогів. Таким чином, створено надійний інструмент для дистанційного моніторингу інкубаторів, що повністю відповідає вимогам сучасних IoT-рішень у сфері аграрної автоматизації.
+
+ 
+ДОДАТОК А
+Відеозапис
+
+Відеозапис презентації результатів лабораторної роботи:
+
+https://youtu.be/GobacCPDq10
+
+
+Хронологічний опис відеозапису:
+
+00:15 - Вхід у аккаунт
+01:04 - Головна сторінка
+01:23 - Сторінка деталей про девайс
+01:41 - Сторінка тривог
+02:16 - Статистика тривог
+02:48 - Сторінка додававння пристрою
+02:55 - Мій профіль
+03:33 - Налаштування профілю 
+ДОДАТОК Б
+Програмний код
+
+GitHub репозиторій: 
+https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia/tree/main/Lab4/pzpi-22-2-dobrovolska-mariia-lab4
+
+
+В.1 Математична обробка прикладних даних.
+1	package com.example.apz_lab4.math
+2	import com.example.apz_lab4.models.Alert
+3	import java.text.SimpleDateFormat
+4	import java.util.*
+5	import kotlin.math.roundToInt
+
+6	class AlertDataProcessor(private val alerts: List<Alert>) {
+
+7	fun totalAlerts(): Int = alerts.size
+
+8	fun resolvedAlerts(): Int = alerts.count { it.status == "resolved" }
+
+9	fun unresolvedAlerts(): Int = alerts.count { it.status != "resolved" }
+
+10	fun temperatureAlerts(): Int = alerts.count { it.type == "temperature" }
+
+11	fun humidityAlerts(): Int = alerts.count { it.type == "humidity" }
+
+12	fun criticalAlerts(): Int = alerts.count { it.severity == "critical" }
+
+13	fun percentageResolved(): Double {
+14	if (alerts.isEmpty()) return 0.0
+15	return (resolvedAlerts().toDouble() / totalAlerts()) * 100
+16	}
+
+17	fun percentageCritical(): Double {
+18	if (alerts.isEmpty()) return 0.0
+19	return (criticalAlerts().toDouble() / totalAlerts()) * 100
+20	}
+
+21	fun averageResponseTimeMinutes(): Double {
+22	val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+23	val times = alerts.mapNotNull { alert ->
+24	val created = format.parse(alert.createdAt)
+25	val resolved = alert.resolvedAt?.let { format.parse(it) }
+26	if (created != null && resolved != null) {
+27	(resolved.time - created.time) / 1000.0 / 60.0
+28	} else null
+29	}
+30	return if (times.isNotEmpty()) times.average() else 0.0
+31	}
+
+32	fun summary(): String {
+33	val resolved = resolvedAlerts()
+34	val unresolved = unresolvedAlerts()
+35	val critical = criticalAlerts()
+36	val temp = temperatureAlerts()
+37	val hum = humidityAlerts()
+38	val avgTime = averageResponseTimeMinutes()
+39	return """
+40	Загальна кількість алертів: $totalAlerts()
+41	Вирішено: $resolved (${percentageResolved().roundToInt()}%)
+42	Невирішено: $unresolved
+43	Критичних: $critical (${percentageCritical().roundToInt()}%)
+44	Температурних: $temp
+45	Вологісних: $hum
+46	Середній час реакції: ${"%.2f".format(avgTime)} хв
+47	""".trimIndent()
+48	}
+49	}
 
