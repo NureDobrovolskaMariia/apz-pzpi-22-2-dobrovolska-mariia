@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="uk"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профіль користувача - Система управління інкубатором</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <span class="logo">🐣</span> Chicken Incubator
+        </div>
+        <ul class="navbar-nav">
+            <li><a href="/html/dashboard.html" class="nav-link">Головна</a></li>
+            <li><a href="/html/devices.html" class="nav-link">Пристрої</a></li>
+            <li><a href="/html/alerts.html" class="nav-link">Сповіщення</a></li>
+            <li><a href="/html/sensor-data.html" class="nav-link">Дані сенсорів</a></li> 
+            <li id="adminPanelLink" style="display: none;"><a href="/html/admin.html" class="nav-link">Панель адміністратора</a></li>
+        </ul>
+        <div class="navbar-user">
+            <div class="dropdown">
+                <span id="userDropdownTrigger" class="dropdown-trigger">
+                     <span id="userNameNav"></span> (<span id="userRoleNav"></span>) 
+                </span>
+                <div class="dropdown-content" id="userDropdown">
+                    <a href="/html/profile.html" class="active">Профіль</a>
+                    <a href="#" id="logoutBtnDropdown">Вихід</a>
+                </div>
+            </div>
+            
+            <button id="logoutBtn" class="btn btn-sm secondary-btn hide-on-mobile" style="display: none;">Вихід</button> 
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content-header">
+            <h1>Мій профіль</h1>
+        </div>
+
+        <div class="tab-navigation">
+            <button class="tab-link active" data-tab="info">Інформація</button>
+            <button class="tab-link" data-tab="settings">Налаштування</button>
+        </div>
+
+        <div id="infoTab" class="tab-content active">
+            <div class="card">
+                <h2>Інформація про користувача</h2>
+                <p><strong>Ім'я:</strong> <span id="profileName"></span></p>
+                <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+                <p><strong>Роль:</strong> <span id="profileRole"></span></p>
+                <p><strong>Зареєстрований з:</strong> <span id="memberSince"></span></p>
+            </div>
+
+            <div class="card mt-20">
+                <h2>Статистика</h2>
+                <p><strong>Кількість пристроїв:</strong> <span id="statDeviceCount"></span></p>
+                <p><strong>Невирішених сповіщень:</strong> <span id="statUnresolvedAlerts"></span></p>
+                <p><strong>Сповіщень за останні 7 днів:</strong> <span id="statRecentAlerts"></span></p>
+            </div>
+        </div>
+
+        <div id="settingsTab" class="tab-content">
+            <div class="card">
+                <h2>Редагувати профіль</h2>
+                <form id="updateProfileForm">
+                    <div class="input-group">
+                        <label for="editName">Ім'я</label>
+                        <input type="text" id="editName" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="currentPassword">Поточний пароль (для зміни пароля)</label> 
+                        <input type="password" id="currentPassword">
+                    </div>
+                    <div class="input-group">
+                        <label for="newPassword">Новий пароль (залиште порожнім, якщо не змінюєте)</label>
+                        <input type="password" id="newPassword">
+                    </div>
+                    <div class="input-group">
+                        <label for="confirmNewPassword">Підтвердіть новий пароль</label>
+                        <input type="password" id="confirmNewPassword">
+                    </div>
+                    <button type="submit" class="btn primary-btn">Зберегти зміни</button>
+                </form>
+                <div id="profileMessage" class="message-area"></div>
+            </div>
+
+            <div class="card mt-20">
+                <h2>Налаштування сповіщень по email</h2>
+                <form id="updateEmailSettingsForm">
+                    <div class="input-group checkbox-group">
+                        <input type="checkbox" id="emailNotificationsEnabled">
+                        <label for="emailNotificationsEnabled">Отримувати сповіщення по email</label>
+                    </div>
+                    <button type="submit" class="btn primary-btn">Зберегти налаштування email</button>
+                </form>
+                <div id="emailSettingsMessage" class="message-area"></div>
+            </div>
+
+            <div class="card mt-20">
+                <h2>Налаштування сповіщень про температуру</h2>
+                <form id="updateTempAlertSettingsForm">
+                    <div class="input-group">
+                        <label for="tempMin">Мінімальна температура (°C)</label>
+                        <input type="number" step="0.1" id="tempMin" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="tempMax">Максимальна температура (°C)</label>
+                        <input type="number" step="0.1" id="tempMax" required>
+                    </div>
+                    <button type="submit" class="btn primary-btn">Зберегти налаштування температури</button>
+                </form>
+                <div id="tempAlertMessage" class="message-area"></div>
+            </div>
+
+            <div class="card mt-20">
+                <h2>Налаштування сповіщень про вологість</h2>
+                <form id="updateHumidityAlertSettingsForm">
+                    <div class="input-group">
+                        <label for="humidityMin">Мінімальна вологість (%)</label>
+                        <input type="number" step="0.1" id="humidityMin" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="humidityMax">Максимальна вологість (%)</label>
+                        <input type="number" step="0.1" id="humidityMax" required>
+                    </div>
+                    <button type="submit" class="btn primary-btn">Зберегти налаштування вологості</button>
+                </form>
+                <div id="humidityAlertMessage" class="message-area"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/profile.js"></script>
+</body>
+</html>

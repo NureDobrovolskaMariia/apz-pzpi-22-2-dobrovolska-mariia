@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/alertsLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
+    <!-- 🔁 Усі сповіщення -->
+    <Button
+        android:id="@+id/allAlertsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="📋 Усі сповіщення"
+        android:backgroundTint="#2196F3"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="12dp"
+        android:elevation="2dp" />
+
+    <!-- 🔍 Фільтри -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="12dp"
+        android:weightSum="4">
+
+        <Button
+            android:id="@+id/filterTemperature"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="🌡 Темпер."
+            android:backgroundTint="#4DB6AC"
+            android:textColor="#FFFFFF"
+            android:elevation="2dp" />
+
+
+        <Button
+            android:id="@+id/filterHumidity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:layout_weight="1"
+            android:backgroundTint="#4DB6AC"
+            android:elevation="2dp"
+            android:text="💧 Волога"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/sortByDate"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="56dp"
+            android:text="🕒 Дата"
+            android:backgroundTint="#4DB6AC"
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="6dp"
+            android:elevation="2dp" />
+    </LinearLayout>
+
+    <!-- 📑 Список -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical" />
+</LinearLayout>
+
+
+

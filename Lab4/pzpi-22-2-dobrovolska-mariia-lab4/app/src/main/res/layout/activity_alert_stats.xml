@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F9FC"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/rootLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Заголовок -->
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📊 Статистика сповіщень"
+            android:textSize="20sp"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:padding="8dp" />
+
+        <!-- Картки зі статистикою -->
+        <GridLayout
+            android:id="@+id/summaryGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="3"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp">
+
+            <!-- Картка -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_columnSpan="1"
+                android:layout_margin="6dp"
+                android:layout_gravity="fill"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:backgroundTint="#2196F3"
+                android:background="@android:drawable/dialog_holo_light_frame">
+
+                <TextView
+                    android:id="@+id/totalAlerts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔔 Всього: 0"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_columnSpan="1"
+                android:layout_margin="6dp"
+                android:layout_gravity="fill"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:backgroundTint="#FF7043"
+                android:background="@android:drawable/dialog_holo_light_frame">
+
+                <TextView
+                    android:id="@+id/unresolvedAlerts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⛔ Невирішені: 0"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_columnSpan="1"
+                android:layout_margin="6dp"
+                android:layout_gravity="fill"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:backgroundTint="#4CAF50"
+                android:background="@android:drawable/dialog_holo_light_frame">
+
+                <TextView
+                    android:id="@+id/resolvedAlerts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✅ Вирішені: 0"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_columnSpan="1"
+                android:layout_margin="6dp"
+                android:layout_gravity="fill"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:backgroundTint="#FFCA28"
+                android:background="@android:drawable/dialog_holo_light_frame">
+
+                <TextView
+                    android:id="@+id/temperatureAlerts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🌡 Темп: 0"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_columnSpan="1"
+                android:layout_margin="6dp"
+                android:layout_gravity="fill"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:backgroundTint="#4DB6AC"
+                android:background="@android:drawable/dialog_holo_light_frame">
+
+                <TextView
+                    android:id="@+id/humidityAlerts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💧 Волога: 0"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_columnSpan="1"
+                android:layout_margin="6dp"
+                android:layout_gravity="fill"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:backgroundTint="#9E9E9E"
+                android:background="@android:drawable/dialog_holo_light_frame">
+
+                <TextView
+                    android:id="@+id/offlineDevices"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📴 Офлайн: 0"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+        </GridLayout>
+
+        <!-- Підзаголовок -->
+        <TextView
+            android:id="@+id/byDeviceSummary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📦 За пристроями:"
+            android:textStyle="italic"
+            android:textSize="15sp"
+            android:padding="8dp" />
+
+        <!-- Графік -->
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/dailyTrendChart"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:layout_marginTop="16dp"
+            android:background="#FFFFFF"
+            android:elevation="4dp" />
+    </LinearLayout>
+</ScrollView>
+
+
+

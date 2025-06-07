@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дашборд - Система управления инкубатором</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <span class="logo">🐣</span> Chicken Incubator
+        </div>
+        <ul class="navbar-nav">
+            <li><a href="/html/dashboard.html" class="nav-link active">Головна</a></li>
+            <li><a href="/html/devices.html" class="nav-link">Пристрої</a></li>
+            <li><a href="/html/alerts.html" class="nav-link">Сповіщення</a></li>
+            <li><a href="/html/sensor-data.html" class="nav-link">Дані сенсорів</a></li>
+            <li id="adminPanelLink" style="display: none;"><a href="/html/admin.html" class="nav-link">Панель адміністратора</a></li>
+        </ul>
+        <div class="navbar-user">
+            <div class="dropdown">
+                <span id="userDropdownTrigger" class="dropdown-trigger">
+                    <span id="userNameNav"></span> (<span id="userRoleNav"></span>)
+                </span>
+                <div class="dropdown-content" id="userDropdown">
+                    <a href="/html/profile.html">Профіль</a>
+                    <a href="#" id="logoutBtnDropdown">Вихід</a>
+                </div>
+            </div>
+            <button id="logoutBtn" class="btn btn-sm secondary-btn hide-on-mobile" style="display: none;">Вихід</button>
+        </div>
+    </nav>
+
+    <div class="container">
+
+
+        <div class="card mb-20">
+            <h2>Огляд системи</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>Пристроїв онлайн</h3>
+                    <p id="onlineDevicesCount">0 / 0</p> </div>
+                <div class="summary-card">
+                    <h3>Активних сповіщень</h3>
+                    <p id="activeAlertsCount">0</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Останння температура</h3>
+                    <p id="avgTemperature">N/A</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Останння вологість</h3>
+                    <p id="avgHumidity">N/A</p>
+                </div>
+                <div class="summary-card"> <h3>Останній рівень освітлення</h3>
+                    <p id="avgLightLevel">N/A</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-20">
+            <h2>Дані пристрою за останні 24 години</h2>
+            <div class="chart-controls">
+                <label for="deviceSelect">Виберіть пристрій:</label>
+                <select id="deviceSelect">
+                    <option value="">Завантаження пристроїв...</option>
+                </select>
+            </div>
+            <div class="chart-canvas-wrapper">
+                 <canvas id="sensorDataChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card mb-20">
+            <h2>Швидкі дії</h2>
+            <div class="quick-actions-grid">
+                 <button class="btn primary-btn" id="turnEggsBtn">Перевернути яйця</button>
+                 <button class="btn primary-btn" id="enableAutoModeBtn">Включити авторежим</button>
+                 <button class="btn secondary-btn" id="disableAutoModeBtn">Виключити авторежим</button>
+                 <button class="btn danger-btn" id="emergencyStopBtn">Аварійна зупинка</button>
+            </div>
+             <p class="mt-10">Виберіть пристрій для дій: 
+                <select id="actionDeviceSelect">
+                    <option value="">Виберіть пристрій...</option>
+                </select>
+            </p>
+            <div id="quickActionMessage" class="message-area mt-10"></div>
+
+            <h3 class="mt-20">Спеціальна команда</h3>
+            <div class="input-group">
+                <label for="customCommandSelect">Виберіть команду:</label>
+                <select id="customCommandSelect" class="form-control">
+                    <option value="">-- Команда --</option>
+                    <option value="heater_on">Увімкнути обігрівач</option>
+                    <option value="heater_off">Вимкнути обігрівач</option>
+                    <option value="humidifier_on">Увімкнути зволожувач</option>
+                    <option value="humidifier_off">Вимкнути зволожувач</option>
+                </select>
+            </div>
+            <button class="btn primary-btn" id="sendCustomCommandBtn" style="width: auto; margin-top: 10px;">Відправити команду</button>
+        </div>
+
+
+        <div class="card mt-20">
+            <h2>Ваші пристрої</h2>
+            <div id="deviceList" class="device-list">
+                <p>Завантаження даних про пристрої...</p>
+            </div>
+        </div>
+        <div class="card mt-20">
+            <h2>Останні дані з датчиків</h2>
+            <div id="latestSensorData" class="sensor-data-grid">
+                <p>Завантаження останніх даних...</p>
+            </div>
+        </div>
+        <div class="card mt-20">
+            <h2>Нерозв'язані сповіщення</h2>
+            <div id="unresolvedAlerts" class="alert-list">
+                <p>Завантаження сповіщень...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

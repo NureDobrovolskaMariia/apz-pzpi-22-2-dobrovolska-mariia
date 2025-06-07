@@ -1,0 +1,115 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAF9F6"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Logo -->
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_egg_incubator"
+            android:layout_gravity="center"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Заголовок -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Інформація про користувача"
+            android:textStyle="bold"
+            android:textColor="#388E3C"
+            android:textSize="18sp"
+            android:layout_marginBottom="12dp" />
+
+        <TextView android:id="@+id/nameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ім’я:" />
+
+        <TextView android:id="@+id/emailText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email:" />
+
+        <TextView android:id="@+id/roleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Роль:" />
+
+        <TextView android:id="@+id/memberSinceText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Зареєстрований з:" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#cccccc"
+            android:layout_marginVertical="12dp" />
+
+        <!-- Статистика -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Статистика"
+            android:textColor="#388E3C"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+        <TextView android:id="@+id/deviceCountText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Кількість пристроїв:" />
+
+        <TextView android:id="@+id/unresolvedAlertsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Невирішених сповіщень:" />
+
+        <TextView android:id="@+id/recentAlertsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Сповіщень за останні 7 днів:" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#cccccc"
+            android:layout_marginVertical="16dp" />
+
+        <!-- Ваші пристрої -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📦 Ваші пристрої"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/devicesText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-" />
+
+        <!-- Кнопка налаштувань -->
+        <Button
+            android:id="@+id/settingsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Налаштування"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</ScrollView>
+
+
+

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fffef5"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Заголовок -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Середовище налаштувань"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#388E3C"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Налаштування профілю -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="👤 Редагування профілю"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/nameInput"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Ім'я"
+            android:background="@drawable/edittext_background"
+            android:padding="8dp" />
+
+        <EditText
+            android:id="@+id/currentPasswordInput"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Поточний пароль"
+            android:inputType="textPassword"
+            android:background="@drawable/edittext_background"
+            android:padding="8dp"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/newPasswordInput"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Новий пароль"
+            android:inputType="textPassword"
+            android:background="@drawable/edittext_background"
+            android:padding="8dp"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/confirmPasswordInput"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Підтвердіть пароль"
+            android:inputType="textPassword"
+            android:background="@drawable/edittext_background"
+            android:padding="8dp"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/saveProfileBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Зберегти зміни"
+            android:backgroundTint="#1976D2"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="16dp" />
+
+        <!-- Розділювач -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#cccccc"
+            android:layout_marginVertical="24dp" />
+
+        <!-- Налаштування алертів -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="⚡️ Алерти"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginBottom="6dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Температура (Min / Max)"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="6dp">
+
+            <EditText
+                android:id="@+id/tempMinInput"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
+                android:hint="Min °C"
+                android:inputType="number"
+                android:gravity="center"
+                android:background="@drawable/edittext_background"
+                android:padding="8dp" />
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/tempMaxInput"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
+                android:hint="Max °C"
+                android:inputType="number"
+                android:gravity="center"
+                android:background="@drawable/edittext_background"
+                android:padding="8dp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Вологість (Min / Max)"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <EditText
+                android:id="@+id/humidityMinInput"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
+                android:hint="Min %"
+                android:inputType="number"
+                android:gravity="center"
+                android:background="@drawable/edittext_background"
+                android:padding="8dp" />
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/humidityMaxInput"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
+                android:hint="Max %"
+                android:inputType="number"
+                android:gravity="center"
+                android:background="@drawable/edittext_background"
+                android:padding="8dp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/saveAlertsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ЗБЕРЕГТИ АЛЕРТИ"
+            android:backgroundTint="#4CAF50"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+</ScrollView>

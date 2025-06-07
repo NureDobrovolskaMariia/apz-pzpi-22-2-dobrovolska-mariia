@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/card_background"
+        android:padding="20dp"
+        android:elevation="4dp">
+
+        <!-- Назва пристрою -->
+        <TextView
+            android:id="@+id/deviceName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🥚 Назва пристрою"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="#222222"
+            android:layout_marginBottom="6dp" />
+
+        <!-- Статус -->
+        <TextView
+            android:id="@+id/deviceStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🟢 Онлайн"
+            android:textColor="#4CAF50"
+            android:textSize="15sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Температура -->
+        <TextView
+            android:id="@+id/tempText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🌡 Температура: 37.5°C"
+            android:textSize="16sp"
+            android:layout_marginBottom="6dp" />
+
+        <!-- Вологість -->
+        <TextView
+            android:id="@+id/humidityText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="💧 Вологість: 55%"
+            android:textSize="16sp"
+            android:layout_marginBottom="6dp" />
+
+        <!-- Освітлення -->
+        <TextView
+            android:id="@+id/lightText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="💡 Освітлення: 78%"
+            android:textSize="16sp"
+            android:layout_marginBottom="6dp" />
+
+        <!-- Час -->
+        <TextView
+            android:id="@+id/timestampText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="⏱ Останнє оновлення: 2025-06-05 14:23"
+            android:textSize="15sp"
+            android:textColor="#777777"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Кнопки -->
+        <Button
+            android:id="@+id/alertsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📢 ПЕРЕГЛЯНУТИ ТРИВОГИ"
+            android:backgroundTint="#FF9800"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/alertStatsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📊 СТАТИСТИКА АЛЕРТІВ"
+            android:backgroundTint="#03A9F4"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</ScrollView>

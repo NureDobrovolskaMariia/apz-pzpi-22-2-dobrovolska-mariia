@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="uk"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мої сповіщення - Система управління інкубатором</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <span class="logo">🐣</span> Chicken Incubator
+        </div>
+        <ul class="navbar-nav">
+            <li><a href="/html/dashboard.html" class="nav-link">Головна</a></li>
+            <li><a href="/html/devices.html" class="nav-link">Пристрої</a></li>
+            <li><a href="/html/alerts.html" class="nav-link active">Сповіщення</a></li>
+            <li><a href="/html/sensor-data.html" class="nav-link">Дані сенсорів</a></li>
+            <li id="adminPanelLink" style="display: none;"><a href="/html/admin.html" class="nav-link">Панель адміністратора</a></li>
+        </ul>
+        <div class="navbar-user">
+            <div class="dropdown">
+                <span id="userDropdownTrigger" class="dropdown-trigger">
+                    Вітаємо, <span id="userNameNav"></span> (<span id="userRoleNav"></span>)
+                </span>
+                <div class="dropdown-content" id="userDropdown">
+                    <a href="/html/profile.html">Профіль</a>
+                    <a href="#" id="logoutBtnDropdown">Вихід</a>
+                </div>
+            </div>
+            <button id="logoutBtn" class="btn btn-sm secondary-btn hide-on-mobile" style="display: none;">Вихід</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content-header">
+            <h1>Мої сповіщення</h1>
+        </div>
+
+        <div class="tab-navigation">
+            <button class="tab-link active" data-tab="all-alerts">Всі сповіщення</button>
+            <button class="tab-link" data-tab="critical-alerts">Критичні сповіщення</button>
+            <button class="tab-link" data-tab="alert-stats">Статистика</button>
+            <button class="tab-link" data-tab="create-alert">Створити вручну</button>
+        </div>
+
+        <div id="all-alertsTab" class="tab-content active">
+            <div class="card">
+                <h2>Список сповіщень</h2>
+                <div class="table-filters">
+                    <label for="alertStatusFilter">Статус:</label>
+                    <select id="alertStatusFilter">
+                        <option value="">Всі</option>
+                        <option value="false">Не вирішено</option>
+                        <option value="true">Вирішено</option>
+                    </select>
+                    <label for="alertSeverityFilter">Рівень:</label>
+                    <select id="alertSeverityFilter">
+                        <option value="">Всі</option>
+                        <option value="LOW">Низький</option>
+                        <option value="MEDIUM">Середній</option>
+                        <option value="HIGH">Високий</option>
+                        <option value="CRITICAL">Критичний</option>
+                    </select>
+                    <label for="alertTypeFilter">Тип:</label>
+                    <select id="alertTypeFilter">
+                        <option value="">Всі</option>
+                        <option value="TEMPERATURE">Температура</option>
+                        <option value="HUMIDITY">Вологість</option>
+                        <option value="DEVICE_OFFLINE">Пристрій офлайн</option>
+                        <option value="SENSOR_ERROR">Помилка сенсора</option>
+                    </select>
+                    <label for="alertDeviceIdFilter">Пристрій:</label>
+                    <select id="alertDeviceIdFilter">
+                        <option value="">Всі пристрої</option>
+                    </select>
+                </div>
+                <div class="mb-10" style="text-align: left;">
+                    <button class="btn secondary-btn btn-sm" id="resolveSelectedAlertsBtn">Вирішити обрані</button>
+                    <button class="btn secondary-btn btn-sm" id="cleanupResolvedAlertsBtn" style="margin-left: 10px;">Очистити вирішені (старші 30 днів)</button>
+                    <div id="alertListMessage" class="message-area mt-10"></div>
+                </div>
+                <table class="device-table">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAllAlerts"></th>
+                            <th>Пристрій</th>
+                            <th>Тип</th>
+                            <th>Рівень</th>
+                            <th>Повідомлення</th>
+                            <th>Поточне значення</th>
+                            <th>Час</th>
+                            <th>Статус</th>
+                            <th>Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alertsTableBody">
+                        <tr><td colspan="9">Завантаження сповіщень...</td></tr>
+                    </tbody>
+                </table>
+                <div class="pagination-controls">
+                    <button id="prevAlertsPage" class="btn btn-sm secondary-btn">Попередня</button>
+                    <span id="currentAlertsPage">Сторінка 1</span>
+                    <button id="nextAlertsPage" class="btn btn-sm secondary-btn">Наступна</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="critical-alertsTab" class="tab-content">
+            <div class="card">
+                <h2>Критичні сповіщення</h2>
+                <div id="criticalAlertsList" class="alert-list">
+                    <p>Завантаження критичних сповіщень...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="alert-statsTab" class="tab-content">
+            <div class="card">
+                <h2>Статистика сповіщень</h2>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <h3>Всього сповіщень</h3>
+                        <p id="totalAlertsCount">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Невирішених</h3>
+                        <p id="unresolvedAlertsStats">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Вирішених</h3>
+                        <p id="resolvedAlertsStats">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Температурних</h3>
+                        <p id="tempAlertsStats">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Вологісних</h3>
+                        <p id="humidityAlertsStats">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Пристрої офлайн</h3>
+                        <p id="offlineAlertsStats">0</p>
+                    </div>
+                </div>
+                <h3 class="mt-20">За пристроями</h3>
+                <div id="alertsByDeviceStats" class="alert-list">
+                    <p>Завантаження статистики за пристроями...</p>
+                </div>
+                <h3 class="mt-20">Щоденний тренд</h3>
+                <div class="chart-canvas-wrapper">
+                    <canvas id="dailyAlertsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="create-alertTab" class="tab-content">
+            <div class="card">
+                <h2>Створити сповіщення вручну</h2>
+                <form id="createManualAlertForm">
+                    <div class="input-group">
+                        <label for="manualAlertDeviceId">Пристрій:</label>
+                        <select id="manualAlertDeviceId" required>
+                            <option value="">-- Оберіть пристрій --</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="manualAlertType">Тип сповіщення:</label>
+                        <select id="manualAlertType" required>
+                            <option value="">-- Оберіть тип --</option>
+                            <option value="TEMPERATURE">Температура</option>
+                            <option value="HUMIDITY">Вологість</option>
+                            <option value="DEVICE_OFFLINE">Пристрій офлайн</option>
+                            <option value="SENSOR_ERROR">Помилка сенсора</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="manualAlertSeverity">Рівень:</label>
+                        <select id="manualAlertSeverity">
+                            <option value="LOW">Низький</option>
+                            <option value="MEDIUM" selected>Середній</option>
+                            <option value="HIGH">Високий</option>
+                            <option value="CRITICAL">Критичний</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="manualAlertValue">Поточне значення (для температури/вологості):</label>
+                        <input type="number" step="0.1" id="manualAlertValue" placeholder="Залиште порожнім для інших типів">
+                    </div>
+                    <div class="input-group">
+                        <label for="manualAlertMessage">Повідомлення:</label>
+                        <textarea id="manualAlertMessage" rows="3" required placeholder="Короткий опис сповіщення"></textarea>
+                    </div>
+                    <button type="submit" class="btn primary-btn">Створити сповіщення</button>
+                </form>
+                <div id="manualAlertMessageDiv" class="message-area mt-10"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/js/alerts.js"></script>
+</body>
+</html>
