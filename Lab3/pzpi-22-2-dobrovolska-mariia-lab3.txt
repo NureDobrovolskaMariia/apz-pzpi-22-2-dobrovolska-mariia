@@ -297,11 +297,20 @@ https://youtu.be/0FZb6ZRpttM
 ДОДАТОК Б
 Графічні матеріали
 
+Рисунок Б.1 — ER-діаграма даних 
+
+
+Рисунок Б.2 — Структура бази даних
+
+
+Рисунок Б.3 — UML-діаграма прецедентів
+
+
+Рисунок Б.4 — UML діаграма компонентів
  
-Рисунок Б.1 — UML діаграма компонентів
- 
- 
-Рисунок Б.2 – UML діаграма взаємодії.  
+
+
+
 ДОДАТОК В
 Програмний код
 
@@ -484,7 +493,8 @@ https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia
 
 
 В.2 Адміністрування бізнес-логіки системи.
-GitHub репозиторій: 
+GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia
+
 
 1	document.addEventListener('DOMContentLoaded', async () => {
 2	    console.log('DOM Content Loaded for admin page.');
@@ -885,5 +895,6 @@ GitHub репозиторій:
 397	    // --- Початкове завантаження ---
 398	    initializeAdminPage();
 399	});
+Резервне копіювання користувацьких даних https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia
 
 
