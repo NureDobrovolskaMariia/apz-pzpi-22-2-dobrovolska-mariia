@@ -98,7 +98,7 @@ Public URL: https://octopus-app-tv6oa.ondigitalocean.app/
 Відеозапис
 
 Відеозапис	презентації	результатів	лабораторної	роботи:
-https://youtu.be/p13-gYMGRdE
+Відеозапис доповіді на YouTube: https://youtu.be/p13-gYMGRdE
 
 Хронологічний опис відеозапису:
 
@@ -110,18 +110,14 @@ https://youtu.be/p13-gYMGRdE
 Графічні матеріали
 
 
-
+Рисунок Б.1 — ER-діаграма даних
  
-Рисунок Б.1 — Загальна архітектура
+Рисунок Б.2 — Загальна архітектура
 
-
- 
+Рисунок Б.3 — UML-діаграма прецедентів
 
 Рисунок Б.3 — Структура бази даних
  
-
- 
-Рисунок Б.1 – UML Діаграма прецедентів
 
 
 
@@ -130,9 +126,7 @@ https://youtu.be/p13-gYMGRdE
 ДОДАТОК В
 Програмний код
 
-GitHub репозиторій: 
-
-https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia/blob/main/Lab5/pzpi-22-2-dobrovolska-mariia-lab5/server.js
+GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia/blob/main/Lab5/pzpi-22-2-dobrovolska-mariia-lab5/server.js
 
 Код мого entry point у систему
 
@@ -299,4 +293,588 @@ https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia/blob/m
 133	module.exports = app; 
 
 
+
+
+GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia
+
+В.1 Математична обробка прикладних даних. Частина коду
+1	<div class="container">
+2	<div class="content-header">
+3	<h1>Мої сповіщення</h1>
+4	</div>
+
+5	<div class="tab-navigation">
+6	<button class="tab-link active" data-tab="all-alerts">Всі сповіщення</button>
+7	<button class="tab-link" data-tab="critical-alerts">Критичні сповіщення</button>
+8	<button class="tab-link" data-tab="alert-stats">Статистика</button>
+9	<button class="tab-link" data-tab="create-alert">Створити вручну</button>
+10	</div>
+
+11	<div id="all-alertsTab" class="tab-content active">
+12	<div class="card">
+13	<h2>Список сповіщень</h2>
+14	<div class="table-filters">
+15	<label for="alertStatusFilter">Статус:</label>
+16	<select id="alertStatusFilter">
+17	<option value="">Всі</option>
+18	<option value="false">Не вирішено</option>
+19	<option value="true">Вирішено</option>
+20	</select>
+21	<label for="alertSeverityFilter">Рівень:</label>
+22	<select id="alertSeverityFilter">
+23	<option value="">Всі</option>
+24	<option value="LOW">Низький</option>
+25	<option value="MEDIUM">Середній</option>
+26	<option value="HIGH">Високий</option>
+27	<option value="CRITICAL">Критичний</option>
+28	</select>
+29	<label for="alertTypeFilter">Тип:</label>
+30	<select id="alertTypeFilter">
+31	<option value="">Всі</option>
+32	<option value="TEMPERATURE">Температура</option>
+33	<option value="HUMIDITY">Вологість</option>
+34	<option value="DEVICE_OFFLINE">Пристрій офлайн</option>
+35	<option value="SENSOR_ERROR">Помилка сенсора</option>
+36	</select>
+37	<label for="alertDeviceIdFilter">Пристрій:</label>
+38	<select id="alertDeviceIdFilter">
+39	<option value="">Всі пристрої</option>
+40	</select>
+41	</div>
+42	<div class="mb-10" style="text-align: left;">
+43	<button class="btn secondary-btn btn-sm" id="resolveSelectedAlertsBtn">Вирішити обрані</button>
+44	<button class="btn secondary-btn btn-sm" id="cleanupResolvedAlertsBtn" style="margin-left: 10px;">Очистити вирішені (старші 30 днів)</button>
+45	<div id="alertListMessage" class="message-area mt-10"></div>
+46	</div>
+47	<table class="device-table">
+48	<thead>
+49	<tr>
+50	<th><input type="checkbox" id="selectAllAlerts"></th>
+51	<th>Пристрій</th>
+52	<th>Тип</th>
+53	<th>Рівень</th>
+54	<th>Повідомлення</th>
+55	<th>Поточне значення</th>
+56	<th>Час</th>
+57	<th>Статус</th>
+58	<th>Дії</th>
+59	</tr>
+60	</thead>
+61	<tbody id="alertsTableBody">
+62	<tr><td colspan="9">Завантаження сповіщень...</td></tr>
+63	</tbody>
+64	</table>
+65	<div class="pagination-controls">
+66	<button id="prevAlertsPage" class="btn btn-sm secondary-btn">Попередня</button>
+67	<span id="currentAlertsPage">Сторінка 1</span>
+68	<button id="nextAlertsPage" class="btn btn-sm secondary-btn">Наступна</button>
+69	</div>
+70	</div>
+71	</div>
+
+72	<div id="critical-alertsTab" class="tab-content">
+73	<div class="card">
+74	<h2>Критичні сповіщення</h2>
+75	<div id="criticalAlertsList" class="alert-list">
+76	<p>Завантаження критичних сповіщень...</p>
+77	</div>
+78	</div>
+79	</div>
+
+80	<div id="alert-statsTab" class="tab-content">
+81	<div class="card">
+82	<h2>Статистика сповіщень</h2>
+83	<div class="summary-grid">
+84	<div class="summary-card">
+85	<h3>Всього сповіщень</h3>
+86	<p id="totalAlertsCount">0</p>
+87	</div>
+88	<div class="summary-card">
+89	<h3>Невирішених</h3>
+90	<p id="unresolvedAlertsStats">0</p>
+91	</div>
+92	<div class="summary-card">
+93	<h3>Вирішених</h3>
+94	<p id="resolvedAlertsStats">0</p>
+95	</div>
+96	<div class="summary-card">
+97	<h3>Температурних</h3>
+98	<p id="tempAlertsStats">0</p>
+99	</div>
+100	<div class="summary-card">
+101	<h3>Вологісних</h3>
+102	<p id="humidityAlertsStats">0</p>
+103	</div>
+104	<div class="summary-card">
+105	<h3>Пристрої офлайн</h3>
+106	<p id="offlineAlertsStats">0</p>
+107	</div>
+108	</div>
+109	<h3 class="mt-20">За пристроями</h3>
+110	<div id="alertsByDeviceStats" class="alert-list">
+111	<p>Завантаження статистики за пристроями...</p>
+112	</div>
+113	<h3 class="mt-20">Щоденний тренд</h3>
+114	<div class="chart-canvas-wrapper">
+115	<canvas id="dailyAlertsChart"></canvas>
+116	</div>
+117	</div>
+118	</div>
+
+119	<div id="create-alertTab" class="tab-content">
+120	<div class="card">
+121	<h2>Створити сповіщення вручну</h2>
+122	<form id="createManualAlertForm">
+123	<div class="input-group">
+124	<label for="manualAlertDeviceId">Пристрій:</label>
+125	<select id="manualAlertDeviceId" required>
+126	<option value="">-- Оберіть пристрій --</option>
+127	</select>
+128	</div>
+129	<div class="input-group">
+130	<label for="manualAlertType">Тип сповіщення:</label>
+131	<select id="manualAlertType" required>
+132	<option value="">-- Оберіть тип --</option>
+133	<option value="TEMPERATURE">Температура</option>
+134	<option value="HUMIDITY">Вологість</option>
+135	<option value="DEVICE_OFFLINE">Пристрій офлайн</option>
+136	<option value="SENSOR_ERROR">Помилка сенсора</option>
+137	</select>
+138	</div>
+139	<div class="input-group">
+140	<label for="manualAlertSeverity">Рівень:</label>
+141	<select id="manualAlertSeverity">
+142	<option value="LOW">Низький</option>
+143	<option value="MEDIUM" selected>Середній</option>
+144	<option value="HIGH">Високий</option>
+145	<option value="CRITICAL">Критичний</option>
+146	</select>
+147	</div>
+148	<div class="input-group">
+149	<label for="manualAlertValue">Поточне значення (для температури/вологості):</label>
+150	<input type="number" step="0.1" id="manualAlertValue" placeholder="Залиште порожнім для інших типів">
+151	</div>
+152	<div class="input-group">
+153	<label for="manualAlertMessage">Повідомлення:</label>
+154	<textarea id="manualAlertMessage" rows="3" required placeholder="Короткий опис сповіщення"></textarea>
+155	</div>
+156	<button type="submit" class="btn primary-btn">Створити сповіщення</button>
+157	</form>
+158	<div id="manualAlertMessageDiv" class="message-area mt-10"></div>
+159	</div>
+160	</div>
+
+161	</div>
+
+162	<script src="/js/alerts.js"></script>
+163	</body>
+164	</html>
+
+
+
+В.2 Адміністрування бізнес-логіки системи.
+GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia
+
+
+1	document.addEventListener('DOMContentLoaded', async () => {
+2	    console.log('DOM Content Loaded for admin page.');
+3	
+4	    const token = localStorage.getItem('jwtToken');
+5	    if (!token) {
+6	        window.location.href = '/html/login.html';
+7	        return;
+8	    }
+9	
+10	    // Елементи навігації
+11	    const userNameNav = document.getElementById('userNameNav');
+12	    const userRoleNav = document.getElementById('userRoleNav');
+13	    const adminPanelLink = document.getElementById('adminPanelLink'); 
+14	    const logoutBtnDropdown = document.getElementById('logoutBtnDropdown');
+15	    const userDropdownTrigger = document.getElementById('userDropdownTrigger');
+16	    const userDropdown = document.getElementById('userDropdown');
+17	
+18	    // Елементи вкладок
+19	    const tabLinks = document.querySelectorAll('.tab-link');
+20	    const tabContents = document.querySelectorAll('.tab-content');
+21	
+22	    // Керування користувачами
+23	    const usersTableBody = document.getElementById('usersTableBody');
+24	    const userSearchInput = document.getElementById('userSearchInput');
+25	    const userRoleFilter = document.getElementById('userRoleFilter');
+26	    const userActiveFilter = document.getElementById('userActiveFilter');
+27	    const applyUserFiltersBtn = document.getElementById('applyUserFiltersBtn');
+28	    const prevUserPageBtn = document.getElementById('prevUserPageBtn');
+29	    const currentUserPageSpan = document.getElementById('currentUserPageSpan');
+30	    const nextUserPageBtn = document.getElementById('nextUserPageBtn');
+31	    const userManagementMessage = document.getElementById('userManagementMessage');
+32	    let currentUserPage = 1;
+33	    const usersPerPage = 10;
+34	
+35	    // Модальне вікно редагування користувача
+36	    const editUserRoleModal = document.getElementById('editUserRoleModal');
+37	    const modalUserId = document.getElementById('modalUserId');
+38	    const modalUserName = document.getElementById('modalUserName');
+39	    const modalUserEmail = document.getElementById('modalUserEmail');
+40	    const modalUserRoleSelect = document.getElementById('modalUserRoleSelect');
+41	    const modalUserIsActive = document.getElementById('modalUserIsActive');
+42	    const saveUserRoleBtn = document.getElementById('saveUserRoleBtn');
+43	    const editUserModalMessage = document.getElementById('editUserModalMessage');
+44	    const closeButton = editUserRoleModal.querySelector('.close-button');
+45	
+46	
+47	    // Статистика платформи
+48	    const platformStatsDaysFilter = document.getElementById('platformStatsDaysFilter');
+49	    const platformStatsCards = document.getElementById('platformStatsCards');
+50	    const userRegistrationChartCanvas = document.getElementById('userRegistrationChart');
+51	    const deviceStatusChartCanvas = document.getElementById('deviceStatusChart');
+52	    let userRegChartInstance, deviceStatusChartInstance;
+53	
+54	    // Моніторинг системи
+55	    const serverInfoDisplay = document.getElementById('serverInfoDisplay');
+56	    const healthCheckDisplay = document.getElementById('healthCheckDisplay');
+57	    const refreshHealthCheckBtn = document.getElementById('refreshHealthCheckBtn');
+58	    
+59	    // --- Допоміжні функції ---
+60	    function showUIMessage(element, type, text) {
+61	        if (!element) return;
+62	        element.textContent = text;
+63	        element.className = `message-area ${type}`;
+64	        element.style.display = 'block';
+65	        setTimeout(() => { element.style.display = 'none'; }, 5000);
+66	    }
+67	
+68	    if (userDropdownTrigger) {
+69	        userDropdownTrigger.addEventListener('click', (e) => {
+70	            e.stopPropagation(); userDropdown.classList.toggle('show');
+71	        });
+72	        window.addEventListener('click', (e) => {
+73	            if (userDropdown.classList.contains('show') && !userDropdownTrigger.contains(e.target) && !userDropdown.contains(e.target)) {
+74	                userDropdown.classList.remove('show');
+75	            }
+76	        });
+77	    }
+78	    if (logoutBtnDropdown) {
+79	        logoutBtnDropdown.addEventListener('click', () => {
+80	            localStorage.removeItem('jwtToken'); window.location.href = '/html/login.html';
+81	        });
+82	    }
+83	    
+84	    // --- Перевірка ролі та завантаження профілю для навігації ---
+85	    async function initializeAdminPage() {
+86	        try {
+87	            const response = await fetch('/api/auth/profile', {
+88	                headers: { 'Authorization': `Bearer ${token}` }
+89	            });
+90	            const data = await response.json();
+91	            if (response.ok) {
+92	                const user = data.data.user;
+93	                userNameNav.textContent = user.name;
+94	                userRoleNav.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+95	                if (user.role !== 'admin') {
+96	                    alert('Доступ заборонено. Ця сторінка лише для адміністраторів.');
+97	                    window.location.href = '/html/dashboard.html';
+98	                    return;
+99	                }
+100	                adminPanelLink.style.display = 'block'; // Переконатися, що посилання видиме
+101	                 loadTabData('user-management'); // Завантажити дані для першої вкладки
+102	            } else {
+103	                localStorage.removeItem('jwtToken'); window.location.href = '/html/login.html';
+104	            }
+105	        } catch (error) {
+106	            console.error('Network error fetching profile:', error);
+107	            localStorage.removeItem('jwtToken'); window.location.href = '/html/login.html';
+108	        }
+109	    }
+110	
+111	    // --- Логіка перемикання вкладок ---
+112	    tabLinks.forEach(link => {
+113	        link.addEventListener('click', () => {
+114	            tabLinks.forEach(item => item.classList.remove('active'));
+115	            tabContents.forEach(content => content.classList.remove('active'));
+116	            link.classList.add('active');
+117	            const targetTabId = link.dataset.tab + 'Tab';
+118	            document.getElementById(targetTabId).classList.add('active');
+119	            loadTabData(link.dataset.tab);
+120	        });
+121	    });
+122	
+123	    function loadTabData(tabId) {
+124	        console.log("Loading data for tab:", tabId);
+125	        switch (tabId) {
+126	            case 'user-management':
+127	                fetchUsers();
+128	                break;
+129	            case 'platform-stats':
+130	                fetchPlatformStats();
+131	                break;
+132	            case 'system-monitoring':
+133	                fetchSystemHealth();
+134	                break;
+135	        }
+136	    }
+137	
+138	    // --- Керування користувачами ---
+139	    async function fetchUsers() {
+140	        const searchTerm = userSearchInput.value;
+141	        const role = userRoleFilter.value;
+142	        const isActive = userActiveFilter.value;
+143	
+144	        let query = `page=${currentUserPage}&limit=${usersPerPage}`;
+145	        if (searchTerm) query += `&search=${encodeURIComponent(searchTerm)}`;
+146	        if (role) query += `&role=${role}`;
+147	        if (isActive !== "") query += `&isActive=${isActive}`;
+148	
+149	        usersTableBody.innerHTML = '<tr><td colspan="6">Завантаження користувачів...</td></tr>';
+150	        try {
+151	            const response = await fetch(`/api/users?${query}`, { //
+152	                headers: { 'Authorization': `Bearer ${token}` }
+153	            });
+154	            const data = await response.json();
+155	            if (response.ok) {
+156	                displayUsersTable(data.data.users, data.pagination);
+157	            } else {
+158	                usersTableBody.innerHTML = `<tr><td colspan="6">Помилка: ${data.message}</td></tr>`;
+159	            }
+160	        } catch (error) {
+161	            usersTableBody.innerHTML = `<tr><td colspan="6">Мережева помилка: ${error.message}</td></tr>`;
+162	        }
+163	    }
+164	
+165	    function displayUsersTable(users, pagination) {
+166	        usersTableBody.innerHTML = '';
+167	        if (users.length === 0) {
+168	            usersTableBody.innerHTML = '<tr><td colspan="6">Користувачів не знайдено.</td></tr>';
+169	        } else {
+170	            users.forEach(user => {
+171	                const row = usersTableBody.insertRow();
+172	                row.insertCell().textContent = user._id;
+173	                row.insertCell().textContent = user.name;
+174	                row.insertCell().textContent = user.email;
+175	                row.insertCell().textContent = user.role;
+176	                row.insertCell().innerHTML = user.isActive ? 
+177	                    '<span class="status-indicator status-online">Так</span>' : 
+178	                    '<span class="status-indicator status-offline">Ні</span>';
+179	
+180	                const actionsCell = row.insertCell();
+181	                const editBtn = document.createElement('button');
+182	                editBtn.className = 'btn btn-sm primary-btn';
+183	                editBtn.textContent = 'Редагувати';
+184	                editBtn.onclick = () => openEditUserModal(user);
+185	                actionsCell.appendChild(editBtn);
+186	                
+187	                const promoteBtn = document.createElement('button');
+188	                promoteBtn.className = 'btn btn-sm secondary-btn ml-5';
+189	                promoteBtn.textContent = 'Підвищити до Admin';
+190	                promoteBtn.disabled = user.role === 'admin';
+191	                promoteBtn.onclick = () => promoteUserToAdmin(user._id, user.name);
+192	                actionsCell.appendChild(promoteBtn);
+193	            });
+194	        }
+195	        currentUserPageSpan.textContent = `Сторінка ${pagination.page} з ${pagination.pages || 1}`;
+196	        prevUserPageBtn.disabled = pagination.page === 1;
+197	        nextUserPageBtn.disabled = pagination.page === pagination.pages || pagination.pages === 0;
+198	    }
+199	
+200	    applyUserFiltersBtn.addEventListener('click', () => { currentUserPage = 1; fetchUsers(); });
+201	    prevUserPageBtn.addEventListener('click', () => { if (currentUserPage > 1) { currentUserPage--; fetchUsers(); } });
+202	    nextUserPageBtn.addEventListener('click', () => { currentUserPage++; fetchUsers(); });
+203	
+204	    function openEditUserModal(user) {
+205	        modalUserId.value = user._id;
+206	        modalUserName.textContent = user.name;
+207	        modalUserEmail.textContent = user.email;
+208	        modalUserRoleSelect.value = user.role;
+209	        modalUserIsActive.checked = user.isActive;
+210	        editUserModalMessage.style.display = 'none';
+211	        editUserRoleModal.style.display = 'flex';
+212	    }
+213	    
+214	    if(closeButton) {
+215	       closeButton.onclick = () => editUserRoleModal.style.display = 'none';
+216	    }
+217	    window.onclick = (event) => {
+218	      if (event.target == editUserRoleModal) {
+219	        editUserRoleModal.style.display = "none";
+220	      }
+221	    }
+222	
+223	    saveUserRoleBtn.addEventListener('click', async () => {
+224	        const userId = modalUserId.value;
+225	        const newRole = modalUserRoleSelect.value;
+226	        const isActive = modalUserIsActive.checked;
+227	
+228	        try {
+229	            const response = await fetch(`/api/users/${userId}`, { 
+230	                method: 'PATCH',
+231	                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+232	                body: JSON.stringify({ role: newRole, isActive: isActive })
+233	            });
+234	            const data = await response.json();
+235	            if (response.ok) {
+236	                showUIMessage(editUserModalMessage, 'success', 'Дані користувача оновлено!');
+237	                fetchUsers();
+238	                setTimeout(() => { editUserRoleModal.style.display = 'none'; }, 1500);
+239	            } else {
+240	                showUIMessage(editUserModalMessage, 'error', `Помилка: ${data.message}`);
+241	            }
+242	        } catch (error) {
+243	            showUIMessage(editUserModalMessage, 'error', `Мережева помилка: ${error.message}`);
+244	        }
+245	    });
+246	
+247	    async function promoteUserToAdmin(userId, userName) {
+248	        if (!confirm(`Ви впевнені, що хочете підвищити користувача ${userName} (${userId}) до адміністратора?`)) {
+249	            return;
+250	        }
+251	        try {
+252	            const response = await fetch(`/api/users/${userId}/promote`, { 
+253	                method: 'PATCH',
+254	                headers: { 'Authorization': `Bearer ${token}` }
+255	            });
+256	            const data = await response.json();
+257	            if (response.ok) {
+258	                showUIMessage(userManagementMessage, 'success', data.message || 'Користувача підвищено до адміністратора.');
+259	                fetchUsers();
+260	            } else {
+261	                showUIMessage(userManagementMessage, 'error', data.message || 'Не вдалося підвищити користувача.');
+262	            }
+263	        } catch (error) {
+264	            showUIMessage(userManagementMessage, 'error', `Мережева помилка: ${error.message}`);
+265	        }
+266	    }
+267	
+268	
+269	    // --- Статистика платформи ---
+270	    platformStatsDaysFilter.addEventListener('change', fetchPlatformStats);
+271	
+272	    async function fetchPlatformStats() {
+273	        const days = platformStatsDaysFilter.value;
+274	        platformStatsCards.innerHTML = '<p>Завантаження статистики...</p>';
+275	        try {
+276	            const response = await fetch(`/api/users/platform/stats?days=${days}`, { //
+277	                headers: { 'Authorization': `Bearer ${token}` }
+278	            });
+279	            const data = await response.json();
+280	            if (response.ok) {
+281	                displayPlatformStats(data.data);
+282	            } else {
+283	                platformStatsCards.innerHTML = `<p class="error">Помилка: ${data.message}</p>`;
+284	            }
+285	        } catch (error) {
+286	            platformStatsCards.innerHTML = `<p class="error">Мережева помилка: ${error.message}</p>`;
+287	        }
+288	    }
+289	
+290	    function displayPlatformStats(stats) {
+291	        platformStatsCards.innerHTML = ''; 
+292	        
+293	        function createStatCard(title, value) {
+294	            const card = document.createElement('div');
+295	            card.className = 'summary-card';
+296	            card.innerHTML = `<h3>${title}</h3><p>${value}</p>`;
+297	            platformStatsCards.appendChild(card);
+298	        }
+299	
+300	        createStatCard('Загальна кількість користувачів', stats.users.total);
+301	        createStatCard('Нові користувачі', `${stats.users.new} (за ${platformStatsDaysFilter.value} дн.)`);
+302	        createStatCard('Адміністратори', stats.users.admins);
+303	        createStatCard('Загальна кількість пристроїв', stats.devices.total);
+304	        createStatCard('Пристроїв онлайн', stats.devices.online);
+305	        createStatCard('Нові пристрої', `${stats.devices.new} (за ${platformStatsDaysFilter.value} дн.)`);
+306	        createStatCard('Загальна кількість сповіщень', `${stats.alerts.total} (за ${platformStatsDaysFilter.value} дн.)`);
+307	        createStatCard('Невирішених сповіщень', stats.alerts.unresolved);
+308	        createStatCard('Критичних сповіщень', stats.alerts.critical);
+309	        createStatCard('Обсяг даних (записів)', `${stats.data.volume} (за ${platformStatsDaysFilter.value} дн.)`);
+310	
+311	        renderUserRegistrationChart(stats.trends.userRegistrations);
+312	        renderDeviceStatusChart(stats.devices);
+313	    }
+314	
+315	    function renderUserRegistrationChart(trendData) {
+316	        if (userRegChartInstance) userRegChartInstance.destroy();
+317	        if (!trendData || trendData.length === 0) {
+318	            userRegistrationChartCanvas.getContext('2d').fillText('Немає даних для тренду реєстрацій.', 10, 50);
+319	            return;
+320	        }
+321	        const labels = trendData.map(d => `${d._id.day}/${d._id.month}/${d._id.year}`);
+322	        const dataPoints = trendData.map(d => d.count);
+323	
+324	        userRegChartInstance = new Chart(userRegistrationChartCanvas, {
+325	            type: 'line',
+326	            data: { labels, datasets: [{ label: 'Реєстрації користувачів', data: dataPoints, borderColor: '#1a73e8', tension: 0.1 }] },
+327	            options: { responsive: true, maintainAspectRatio: false }
+328	        });
+329	    }
+330	    
+331	    function renderDeviceStatusChart(deviceStats) {
+332	        if (deviceStatusChartInstance) deviceStatusChartInstance.destroy();
+333	         const data = {
+334	            labels: ['Онлайн', 'Офлайн', 'Всього активних'],
+335	            datasets: [{
+336	                label: 'Статус пристроїв',
+337	                data: [deviceStats.online, deviceStats.total - deviceStats.online, deviceStats.total],
+338	                backgroundColor: ['#28a745', '#dc3545', '#007bff']
+339	            }]
+340	        };
+341	        deviceStatusChartInstance = new Chart(deviceStatusChartCanvas, {
+342	            type: 'bar',
+343	            data: data,
+344	            options: {
+345	                responsive: true,
+346	                maintainAspectRatio: false,
+347	                scales: { y: { beginAtZero: true } },
+348	                plugins: { legend: { display: false } }
+349	            }
+350	        });
+351	    }
+352	
+353	
+354	    // --- Моніторинг системи ---
+355	    refreshHealthCheckBtn.addEventListener('click', fetchSystemHealth);
+356	
+357	    async function fetchSystemHealth() {
+358	        serverInfoDisplay.innerHTML = '<p>Завантаження інформації про сервер...</p>';
+359	        healthCheckDisplay.innerHTML = '<p>Завантаження стану системи...</p>';
+360	        try {
+361	            const response = await fetch('/health', { headers: { 'Authorization': `Bearer ${token}` } }); //
+362	            const data = await response.json();
+363	            if (response.ok) {
+364	                displayServerInfo(data);
+365	                displayHealthCheck(data);
+366	            } else {
+367	                serverInfoDisplay.innerHTML = `<p class="error">Помилка: ${data.message || 'Не вдалося завантажити інформацію'}</p>`;
+368	                healthCheckDisplay.innerHTML = `<p class="error">Помилка: ${data.message || 'Не вдалося завантажити стан'}</p>`;
+369	            }
+370	        } catch (error) {
+371	            serverInfoDisplay.innerHTML = `<p class="error">Мережева помилка: ${error.message}</p>`;
+372	            healthCheckDisplay.innerHTML = `<p class="error">Мережева помилка: ${error.message}</p>`;
+373	        }
+374	    }
+375	
+376	    function displayServerInfo(healthData) {
+377	        serverInfoDisplay.innerHTML = `
+378	            <div class="summary-card"><h3>Версія API/Сервера</h3><p>${healthData.environment} (умовно)</p></div>
+379	            <div class="summary-card"><h3>Час роботи сервера</h3><p>${(healthData.uptime / 3600).toFixed(2)} годин</p></div>
+380	            <div class="summary-card"><h3>Використання пам'яті (Heap Total)</h3><p>${(healthData.memory.heapTotal / 1024 / 1024).toFixed(2)} MB</p></div>
+381	            <div class="summary-card"><h3>Використання пам'яті (Heap Used)</h3><p>${(healthData.memory.heapUsed / 1024 / 1024).toFixed(2)} MB</p></div>
+382	        `;
+383	    }
+384	
+385	    function displayHealthCheck(healthData) {
+386	        healthCheckDisplay.innerHTML = `
+387	            <div class="summary-card">
+388	                <h3>Статус сервера</h3>
+389	                <p class="${healthData.status === 'OK' ? 'status-online' : 'status-offline'}">${healthData.status}</p>
+390	            </div>
+391	            <div class="summary-card"><h3>Час перевірки</h3><p>${new Date(healthData.timestamp).toLocaleString()}</p></div>
+392	            <div class="summary-card"><h3>База даних</h3><p class="${healthData.database === 'connected' ? 'status-online' : 'status-offline'}">${healthData.database}</p></div>
+393	            <div class="summary-card"><h3>MQTT Брокер</h3><p class="${healthData.mqtt === 'connected' ? 'status-online' : 'status-offline'}">${healthData.mqtt}</p></div>
+394	        `;
+395	    }
+396	
+397	    // --- Початкове завантаження ---
+398	    initializeAdminPage();
+399	});
+Резервне копіювання користувацьких даних 
+GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia
 
