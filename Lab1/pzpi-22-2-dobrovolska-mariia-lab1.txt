@@ -275,7 +275,7 @@ IoT-пристрої
 Посилання на відео
 
 Посилання на відео із поясненням до першої лабораторної роботи  VISION AND SCOPE DOCUMENT (КОНЦЕПЦІЯ ТА РАМКИ ПРОЄКТУ)
-https://youtu.be/4cse-hfFRKI
+Відеозапис доповіді на YouTube: https://youtu.be/4cse-hfFRKI
 
 Зміст відео:
 00:22 - 1.1 Background (Передумови)
