@@ -314,6 +314,7 @@ Hover ефекти:
 ДОДАТОК В
 Програмний код
 
+В.1 Математична обробка прикладних даних.
 GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia
 
 В.1 Математична обробка прикладних даних. Частина коду
@@ -894,7 +895,7 @@ GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi
 397	    // --- Початкове завантаження ---
 398	    initializeAdminPage();
 399	});
-Резервне копіювання користувацьких даних 
+
+
+В.3 Резервне копіювання користувацьких даних.
 GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia
-
-
