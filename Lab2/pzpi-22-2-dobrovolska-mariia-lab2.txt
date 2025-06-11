@@ -105,9 +105,7 @@
 
 Програмний код
 
-
-В.1 Математична обробка прикладних даних. Код файлу з розрахунком статистики по диним девайсу та створення звіту.
-
+В.1 Математична обробка прикладних даних.
 GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia/blob/main/Lab2/pzpi-22-2-dobrovolska-mariia-lab2/server/controllers/dataController.js
 
 1	// Get data statistics
@@ -784,5 +782,6 @@ GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi
 397	    // --- Початкове завантаження ---
 398	    initializeAdminPage();
 399	});
-Резервне копіювання користувацьких даних 
-GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia
+
+В.3 Резервне копіювання користувацьких даних.
+GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia/blob/main/Lab2/pzpi-22-2-dobrovolska-mariia-lab2/server
