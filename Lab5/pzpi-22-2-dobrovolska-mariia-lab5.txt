@@ -293,9 +293,9 @@ GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi
 133	module.exports = app; 
 
 
-
-
+В.2 Математична обробка прикладних даних.
 GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia
+
 
 В.1 Математична обробка прикладних даних. Частина коду
 1	<div class="container">
@@ -472,7 +472,7 @@ GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi
 
 
 
-В.2 Адміністрування бізнес-логіки системи.
+В.3 Адміністрування бізнес-логіки системи.
 GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia
 
 
@@ -875,6 +875,7 @@ GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi
 397	    // --- Початкове завантаження ---
 398	    initializeAdminPage();
 399	});
-Резервне копіювання користувацьких даних 
-GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia
 
+
+В.4 Резервне копіювання користувацьких даних.
+GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia
