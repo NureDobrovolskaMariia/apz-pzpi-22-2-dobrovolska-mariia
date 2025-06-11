@@ -303,8 +303,8 @@ buttonSave.setOnClickListener {
 ДОДАТОК В
 Програмний код
 
+В.1 Математична обробка прикладних данихи.
 GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia/tree/main/Lab4/pzpi-22-2-dobrovolska-mariia-lab4
-
 
 В.1 Математична обробка прикладних даних.
 1	package com.example.apz_lab4.math
@@ -771,5 +771,6 @@ GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi
 397	    // --- Початкове завантаження ---
 398	    initializeAdminPage();
 399	});
-Резервне копіювання користувацьких даних 
-GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia
+
+В.3 Резервне копіювання користувацьких даних.
+GitHub репозиторій: https://github.com/NureDobrovolskaMariia/apz-pzpi-22-2-dobrovolska-mariia/tree/main/Lab4/pzpi-22-2-dobrovolska-mariia-lab4
